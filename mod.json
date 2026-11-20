@@ -9,13 +9,9 @@
     "name": "Extreme Difficulty",
     "developer": "therealcuber65",
     "description": "Adds a 15-star custom difficulty",
-    "dependencies": [
-        {
-            "id": "geode.node-ids",
-            "version": ">=1.0.0",
-            "importance": "required"
-        }
-    ],
+    "dependencies": {
+        "geode.node-ids": ">=1.0.0"
+    },
     "resources": {
         "sprites": [
             "resources/list_demon.png"
