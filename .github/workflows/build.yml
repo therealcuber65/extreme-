@@ -16,7 +16,7 @@ jobs:
           - name: Windows
             os: windows-latest
             platform: win
-            args: -DCMAKE_CXX_FLAGS="/D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH"
+            args: -DCMAKE_CXX_FLAGS="-D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH"
           - name: Android64
             os: ubuntu-latest
             platform: android64
