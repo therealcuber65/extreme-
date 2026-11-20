@@ -4,8 +4,8 @@
 
 using namespace geode::prelude;
 
-// Change the text here if you want a different difficulty name
-constexpr const char* CUSTOM_DIFFICULTY_NAME = "LIST DEMON";
+// Use \n to stack onto two lines just like vanilla "EASY\nDEMON"
+constexpr const char* CUSTOM_DIFFICULTY_NAME = "LIST\nDEMON";
 
 bool isCustom15StarLevel(GJGameLevel* level) {
     return level && level->m_stars == 15 && level->m_levelID != 139;
@@ -53,10 +53,11 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
     if (auto diffSprite = layer->getChildByID("difficulty-sprite")) {
         auto label = CCLabelBMFont::create(CUSTOM_DIFFICULTY_NAME, "bigFont.fnt");
         label->setID("custom-15-label"_spr);
-        label->limitLabelWidth(52.f, 0.35f, 0.1f);
+        label->setAlignment(kCCTextAlignmentCenter);
+        label->limitLabelWidth(65.f, 0.43f, 0.1f);
         label->setPosition({
             diffSprite->getPositionX(),
-            diffSprite->getPositionY() - 25.f
+            diffSprite->getPositionY() - 28.f
         });
         layer->addChild(label);
     }
