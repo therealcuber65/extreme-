@@ -15,15 +15,15 @@ jobs:
         include:
           - name: Windows
             os: windows-latest
-            platform: win
+            target: win
             args: -DCMAKE_CXX_FLAGS="-D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH"
           - name: Android64
             os: ubuntu-latest
-            platform: android64
+            target: android64
             args: ""
           - name: Android32
             os: ubuntu-latest
-            platform: android32
+            target: android32
             args: ""
 
     steps:
@@ -32,8 +32,9 @@ jobs:
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          platform: ${{ matrix.platform }}
+          target: ${{ matrix.target }}
           configure-args: ${{ matrix.args }}
+          combine: true
 
   package:
     name: Package Mod
