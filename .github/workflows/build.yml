@@ -1,44 +1,24 @@
-name: Build Geode Mod
-
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
-
-jobs:
-  build:
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Windows
-            os: windows-latest
-            platform: win
-            args: -DCMAKE_CXX_FLAGS="-D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH"
-          - name: Android64
-            os: ubuntu-latest
-            platform: android64
-            args: ""
-          - name: Android32
-            os: ubuntu-latest
-            platform: android32
-            args: ""
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Build Mod
-        uses: geode-sdk/build-geode-mod@main
-        with:
-          platform: ${{ matrix.platform }}
-          configure-args: ${{ matrix.args }}
-
-  package:
-    name: Package Mod
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Combine .geode Artifacts
-        uses: geode-sdk/build-geode-mod/combine@main
+{
+    "geode": "4.10.0",
+    "gd": {
+        "win": "2.2074",
+        "android": "2.2074"
+    },
+    "version": "v1.0.0",
+    "id": "therealcuber65.extreme_difficulty",
+    "name": "Extreme Difficulty",
+    "developer": "therealcuber65",
+    "description": "Adds a 15-star custom difficulty",
+    "dependencies": [
+        {
+            "id": "geode.node-ids",
+            "version": ">=1.0.0",
+            "importance": "required"
+        }
+    ],
+    "resources": {
+        "sprites": [
+            "resources/YOUR_IMAGE.png"
+        ]
+    }
+}
