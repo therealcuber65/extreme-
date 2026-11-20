@@ -6,8 +6,24 @@ using namespace geode::prelude;
 
 void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
     if (!diffSprite) return;
-    if (auto customFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("6z11wx8mjdrmr0d1zabs637akc_result_0.png"_spr)) {
-        diffSprite->setDisplayFrame(customFrame);
+
+    if (diffSprite->getChildByID("custom-15-face"_spr)) return;
+
+    if (auto customSprite = CCSprite::create("extreme.png"_spr)) {
+        customSprite->setID("custom-15-face"_spr);
+
+        diffSprite->setOpacity(0);
+
+        auto targetSize = diffSprite->getContentSize();
+        auto imgSize = customSprite->getContentSize();
+        if (imgSize.width > 0 && imgSize.height > 0) {
+            float scaleX = targetSize.width / imgSize.width;
+            float scaleY = targetSize.height / imgSize.height;
+            customSprite->setScale(std::min(scaleX, scaleY));
+        }
+
+        customSprite->setPosition(targetSize / 2.f);
+        diffSprite->addChild(customSprite);
     }
 }
 
