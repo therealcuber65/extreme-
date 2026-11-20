@@ -1,0 +1,24 @@
+{
+    "geode": "4.0.1",
+    "gd": {
+        "win": "2.2074",
+        "android": "2.2074"
+    },
+    "version": "v1.0.0",
+    "id": "therealcuber65.extreme_difficulty",
+    "name": "Extreme Difficulty",
+    "developer": "therealcuber65",
+    "description": "Adds a 15-star custom difficulty",
+    "dependencies": [
+        {
+            "id": "geode.node-ids",
+            "version": ">=1.0.0",
+            "importance": "required"
+        }
+    ],
+    "resources": {
+        "sprites": [
+            "resources/6z11wx8mjdrmr0d1zabs637akc_result_0.png"
+        ]
+    }
+}
