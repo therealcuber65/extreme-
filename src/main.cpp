@@ -4,8 +4,8 @@
 
 using namespace geode::prelude;
 
-// Change the difficulty name here if you want a different title
-constexpr const char* CUSTOM_DIFFICULTY_NAME = "List Demon";
+// Change the text here if you want a different difficulty name
+constexpr const char* CUSTOM_DIFFICULTY_NAME = "LIST DEMON";
 
 bool isCustom15StarLevel(GJGameLevel* level) {
     return level && level->m_stars == 15 && level->m_levelID != 139;
@@ -42,10 +42,23 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
 void applyCustom15StarLabel(LevelInfoLayer* layer) {
     if (!layer) return;
 
-    if (auto diffLabel = typeinfo_cast<CCLabelBMFont*>(layer->getChildByID("difficulty-label"))) {
-        diffLabel->setString(CUSTOM_DIFFICULTY_NAME);
-        diffLabel->setVisible(true);
-        diffLabel->limitLabelWidth(55.f, 0.4f, 0.1f);
+    // Hide vanilla demon label if the level also has a demon flag
+    if (auto demonLabel = layer->getChildByID("demon-label")) {
+        demonLabel->setVisible(false);
+    }
+
+    // Prevent adding duplicate labels on refresh
+    if (layer->getChildByID("custom-15-label"_spr)) return;
+
+    if (auto diffSprite = layer->getChildByID("difficulty-sprite")) {
+        auto label = CCLabelBMFont::create(CUSTOM_DIFFICULTY_NAME, "bigFont.fnt");
+        label->setID("custom-15-label"_spr);
+        label->limitLabelWidth(52.f, 0.35f, 0.1f);
+        label->setPosition({
+            diffSprite->getPositionX(),
+            diffSprite->getPositionY() - 25.f
+        });
+        layer->addChild(label);
     }
 }
 
