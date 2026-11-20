@@ -9,7 +9,7 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
 
     if (diffSprite->getChildByID("custom-15-face"_spr)) return;
 
-    if (auto customSprite = CCSprite::create("list_demon.png"_spr)) {
+    if (auto customSprite = CCSprite::createWithSpriteFrameName("list_demon.png"_spr)) {
         customSprite->setID("custom-15-face"_spr);
 
         diffSprite->setOpacity(0);
