@@ -7,7 +7,34 @@ on:
 
 jobs:
   build:
-    uses: geode-sdk/build-geode-mod/.github/workflows/build.yml@main
-    with:
-      platforms: windows, android64, android32
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+            platform: win
+          - name: Android64
+            os: ubuntu-latest
+            platform: android64
+          - name: Android32
+            os: ubuntu-latest
+            platform: android32
 
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Mod
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          platform: ${{ matrix.platform }}
+
+  package:
+    name: Package Mod
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Combine .geode Artifacts
+        uses: geode-sdk/build-geode-mod/combine@main
