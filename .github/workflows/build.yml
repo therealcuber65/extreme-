@@ -15,15 +15,15 @@ jobs:
         include:
           - name: Windows
             os: windows-latest
-            target: win
+            target: Win64
             args: -DCMAKE_CXX_FLAGS="-D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH"
           - name: Android64
             os: ubuntu-latest
-            target: android64
+            target: Android64
             args: ""
           - name: Android32
             os: ubuntu-latest
-            target: android32
+            target: Android32
             args: ""
 
     steps:
