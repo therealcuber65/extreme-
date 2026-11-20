@@ -9,7 +9,15 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
 
     if (diffSprite->getChildByID("custom-15-face"_spr)) return;
 
-    if (auto customSprite = CCSprite::createWithSpriteFrameName("list_demon.png"_spr)) {
+    // Look up the exact unpacked file path inside the mod's resources folder
+    auto imgPath = Mod::get()->getResourcesDir() / "resources" / "list_demon.png";
+    if (!std::filesystem::exists(imgPath)) {
+        imgPath = Mod::get()->getResourcesDir() / "list_demon.png";
+    }
+
+    log::info("Loading custom difficulty from: {} (exists: {})", imgPath, std::filesystem::exists(imgPath));
+
+    if (auto customSprite = CCSprite::create(imgPath.string().c_str())) {
         customSprite->setID("custom-15-face"_spr);
 
         diffSprite->setOpacity(0);
@@ -24,6 +32,8 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
 
         customSprite->setPosition(targetSize / 2.f);
         diffSprite->addChild(customSprite);
+    } else {
+        log::error("CCSprite::create failed for {}", imgPath);
     }
 }
 
