@@ -4,18 +4,19 @@
 
 using namespace geode::prelude;
 
+bool isCustom15StarLevel(GJGameLevel* level) {
+    return level && level->m_stars == 15 && level->m_levelID != 139;
+}
+
 void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
     if (!diffSprite) return;
 
     if (diffSprite->getChildByID("custom-15-face"_spr)) return;
 
-    // Look up the exact unpacked file path inside the mod's resources folder
     auto imgPath = Mod::get()->getResourcesDir() / "resources" / "list_demon.png";
     if (!std::filesystem::exists(imgPath)) {
         imgPath = Mod::get()->getResourcesDir() / "list_demon.png";
     }
-
-    log::info("Loading custom difficulty from: {} (exists: {})", imgPath, std::filesystem::exists(imgPath));
 
     if (auto customSprite = CCSprite::create(imgPath.string().c_str())) {
         customSprite->setID("custom-15-face"_spr);
@@ -32,15 +33,13 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
 
         customSprite->setPosition(targetSize / 2.f);
         diffSprite->addChild(customSprite);
-    } else {
-        log::error("CCSprite::create failed for {}", imgPath);
     }
 }
 
 class $modify(MyLevelCell, LevelCell) {
     void loadFromLevel(GJGameLevel* level) {
         LevelCell::loadFromLevel(level);
-        if (level && level->m_stars == 15) {
+        if (isCustom15StarLevel(level)) {
             if (auto diffContainer = this->m_mainLayer->getChildByID("difficulty-container")) {
                 if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(diffContainer->getChildByID("difficulty-sprite"))) {
                     applyCustom15StarFace(diffSprite);
@@ -53,7 +52,7 @@ class $modify(MyLevelCell, LevelCell) {
 class $modify(MyLevelInfoLayer, LevelInfoLayer) {
     bool init(GJGameLevel* level, bool challenge) {
         if (!LevelInfoLayer::init(level, challenge)) return false;
-        if (level && level->m_stars == 15) {
+        if (isCustom15StarLevel(level)) {
             if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
                 applyCustom15StarFace(diffSprite);
             }
@@ -63,7 +62,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
     void levelDownloadFinished(GJGameLevel* level) {
         LevelInfoLayer::levelDownloadFinished(level);
-        if (level && level->m_stars == 15) {
+        if (isCustom15StarLevel(level)) {
             if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
                 applyCustom15StarFace(diffSprite);
             }
