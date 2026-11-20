@@ -15,15 +15,15 @@ jobs:
         include:
           - name: Windows
             os: windows-latest
-            target: Win64
+            target: win
             args: -DCMAKE_CXX_FLAGS="-D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH"
           - name: Android64
             os: ubuntu-latest
-            target: Android64
+            target: android64
             args: ""
           - name: Android32
             os: ubuntu-latest
-            target: Android32
+            target: android32
             args: ""
 
     steps:
@@ -43,11 +43,3 @@ jobs:
     steps:
       - name: Combine .geode Artifacts
         uses: geode-sdk/build-geode-mod/combine@main
-        id: combine
-
-      - name: Upload Final .geode
-        uses: actions/upload-artifact@v4
-        with:
-          name: Build Output
-          path: ${{ steps.combine.outputs.path }}
-
