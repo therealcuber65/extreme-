@@ -13,7 +13,7 @@
         "geode.node-ids": ">=1.0.0"
     },
     "resources": {
-        "sprites": [
+        "files": [
             "resources/list_demon.png"
         ]
     }
