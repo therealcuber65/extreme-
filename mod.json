@@ -17,7 +17,7 @@
         }
     ],
     "resources": {
-        "files": [
+        "sprites": [
             "resources/list_demon.png"
         ]
     }
