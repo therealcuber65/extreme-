@@ -17,8 +17,8 @@
         }
     ],
     "resources": {
-        "sprites": [
-            "resources/YOUR_IMAGE.png"
+        "files": [
+            "resources/extreme.png"
         ]
     }
 }
