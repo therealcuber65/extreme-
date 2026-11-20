@@ -1,8 +1,8 @@
 {
-    "geode": "4.0.1",
+    "geode": "5.11.2",
     "gd": {
-        "win": "2.2074",
-        "android": "2.2074"
+        "win": "2.2081",
+        "android": "2.2081"
     },
     "version": "v1.0.0",
     "id": "therealcuber65.extreme_difficulty",
@@ -18,7 +18,7 @@
     ],
     "resources": {
         "sprites": [
-            "resources/6z11wx8mjdrmr0d1zabs637akc_result_0.png"
+            "resources/YOUR_IMAGE.png"
         ]
     }
 }
