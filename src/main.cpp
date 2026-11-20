@@ -4,6 +4,9 @@
 
 using namespace geode::prelude;
 
+// Change the difficulty name here if you want a different title
+constexpr const char* CUSTOM_DIFFICULTY_NAME = "List Demon";
+
 bool isCustom15StarLevel(GJGameLevel* level) {
     return level && level->m_stars == 15 && level->m_levelID != 139;
 }
@@ -36,6 +39,16 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
     }
 }
 
+void applyCustom15StarLabel(LevelInfoLayer* layer) {
+    if (!layer) return;
+
+    if (auto diffLabel = typeinfo_cast<CCLabelBMFont*>(layer->getChildByID("difficulty-label"))) {
+        diffLabel->setString(CUSTOM_DIFFICULTY_NAME);
+        diffLabel->setVisible(true);
+        diffLabel->limitLabelWidth(55.f, 0.4f, 0.1f);
+    }
+}
+
 class $modify(MyLevelCell, LevelCell) {
     void loadFromLevel(GJGameLevel* level) {
         LevelCell::loadFromLevel(level);
@@ -56,6 +69,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
             if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
                 applyCustom15StarFace(diffSprite);
             }
+            applyCustom15StarLabel(this);
         }
         return true;
     }
@@ -66,6 +80,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
             if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
                 applyCustom15StarFace(diffSprite);
             }
+            applyCustom15StarLabel(this);
         }
     }
 };
