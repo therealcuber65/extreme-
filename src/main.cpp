@@ -33,7 +33,7 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
             customSprite->setScale(std::min(scaleX, scaleY) * 0.85f);
         }
 
-        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f + 8.5f });
+        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f + 7.5f });
         diffSprite->addChild(customSprite);
     }
 }
