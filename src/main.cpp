@@ -40,9 +40,9 @@ void addShadowedLabel(CCNode* parent, const char* text, const char* id, CCPoint 
     auto shadow = CCLabelBMFont::create(text, "bigFont.fnt");
     shadow->setScale(scale);
     shadow->setColor({ 0, 0, 0 });
-    shadow->setOpacity(150);
+    shadow->setOpacity(75);
     shadow->setZOrder(9);
-    shadow->setPosition({ pos.x + 1.5f, pos.y - 1.5f });
+    shadow->setPosition({ pos.x + 1.0f, pos.y - 1.0f });
     parent->addChild(shadow);
 
     auto label = CCLabelBMFont::create(text, "bigFont.fnt");
