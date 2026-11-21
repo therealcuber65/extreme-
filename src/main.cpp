@@ -107,8 +107,7 @@ class $modify(MyLevelCell, LevelCell) {
         if (isCustom15StarLevel(level)) {
             if (auto diffContainer = this->m_mainLayer->getChildByID("difficulty-container")) {
                 if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(diffContainer->getChildByID("difficulty-sprite"))) {
-                    // Use 1.0f scale in LevelCell so it fills the Featured ring just like Incandescence
-                    applyCustom15StarFace(diffSprite, 1.0f, 5.5f);
+                    applyCustom15StarFace(diffSprite, 1.0f, 7.5f);
                     applyCustom15StarCellLabel(diffContainer, diffSprite);
                 }
             }
@@ -121,7 +120,6 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         if (!isCustom15StarLevel(this->m_level)) return;
 
         if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
-            // Keep 0.85f scale and +7.5f offset on LevelInfoLayer
             applyCustom15StarFace(diffSprite, 0.85f, 7.5f);
             applyCustom15StarLabel(this);
             diffSprite->setPositionY(diffSprite->getPositionY() + 3.f);
