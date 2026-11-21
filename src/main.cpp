@@ -36,6 +36,23 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
     }
 }
 
+void addShadowedLabel(CCNode* parent, const char* text, const char* id, CCPoint pos, float scale) {
+    auto shadow = CCLabelBMFont::create(text, "bigFont.fnt");
+    shadow->setScale(scale);
+    shadow->setColor({ 0, 0, 0 });
+    shadow->setOpacity(150);
+    shadow->setZOrder(9);
+    shadow->setPosition({ pos.x + 1.5f, pos.y - 1.5f });
+    parent->addChild(shadow);
+
+    auto label = CCLabelBMFont::create(text, "bigFont.fnt");
+    label->setID(id);
+    label->setScale(scale);
+    label->setZOrder(10);
+    label->setPosition(pos);
+    parent->addChild(label);
+}
+
 void applyCustom15StarLabel(LevelInfoLayer* layer) {
     if (!layer) return;
 
@@ -53,19 +70,8 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
 
         float centerX = diffSprite->getContentSize().width / 2.f;
 
-        auto topLabel = CCLabelBMFont::create("LIST", "bigFont.fnt");
-        topLabel->setID("custom-15-label-top"_spr);
-        topLabel->setScale(0.33f);
-        topLabel->setZOrder(10);
-        topLabel->setPosition({ centerX, 4.5f });
-        diffSprite->addChild(topLabel);
-
-        auto bottomLabel = CCLabelBMFont::create("DEMON", "bigFont.fnt");
-        bottomLabel->setID("custom-15-label-bottom"_spr);
-        bottomLabel->setScale(0.33f);
-        bottomLabel->setZOrder(10);
-        bottomLabel->setPosition({ centerX, -4.0f });
-        diffSprite->addChild(bottomLabel);
+        addShadowedLabel(diffSprite, "LIST", "custom-15-label-top"_spr, { centerX, 7.0f }, 0.36f);
+        addShadowedLabel(diffSprite, "DEMON", "custom-15-label-bottom"_spr, { centerX, -2.5f }, 0.36f);
     }
 }
 
