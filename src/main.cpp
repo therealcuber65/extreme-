@@ -9,23 +9,27 @@ bool isCustom15StarLevel(GJGameLevel* level) {
     return level && level->m_stars == 15 && level->m_levelID != 139;
 }
 
-void fixFeatureGlowPosition(GJDifficultySprite* diffSprite) {
-    if (!diffSprite) return;
+void alignFeatureGlowToFace(CCNode* parent, GJDifficultySprite* diffSprite) {
+    if (!parent || !diffSprite) return;
 
-    auto targetSize = diffSprite->getContentSize();
-    CCPoint centeredPos = { targetSize.width / 2.f, targetSize.height / 2.f - 4.5f };
+    // On LevelInfoLayer / LevelCell, the Feature/Epic/Legendary/Mythic glow is a sibling of difficulty-sprite
+    // (or stored on diffSprite->m_featureCoin). Align any glow node to the face's exact center.
+    CCPoint faceCenter = diffSprite->getPosition();
 
-    // Shift every native child sprite (Featured ring, Epic/Legendary/Mythic fire)
-    // down to match Extreme Demon centering
-    for (auto* child : diffSprite->getChildrenExt()) {
-        if (!child) continue;
+    if (auto coin = diffSprite->m_featureCoin) {
+        coin->setPosition({ diffSprite->getContentSize().width / 2.f, diffSprite->getContentSize().height / 2.f - 4.5f });
+        coin->setZOrder(-1);
+    }
+
+    for (auto* child : parent->getChildrenExt()) {
+        if (!child || child == diffSprite) continue;
         auto id = child->getID();
-        if (id != "custom-15-face"_spr &&
-            id != "custom-15-label-top"_spr &&
-            id != "custom-15-label-bottom"_spr &&
-            id != "custom-15-shadow"_spr) {
-            child->setPosition(centeredPos);
-            child->setZOrder(-1);
+        // Geometry Dash's feature glow sprite sits right around difficulty-sprite's X coordinate
+        if (id == "feature-coin" || id == "epic-sprite" ||
+            (std::abs(child->getPositionX() - faceCenter.x) < 1.f &&
+             std::abs(child->getPositionY() - faceCenter.y) < 15.f &&
+             child->getZOrder() < diffSprite->getZOrder())) {
+            child->setPosition({ faceCenter.x, faceCenter.y - 4.5f });
         }
     }
 }
@@ -34,7 +38,6 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
     if (!diffSprite) return;
 
     diffSprite->setOpacity(0);
-    fixFeatureGlowPosition(diffSprite);
 
     if (diffSprite->getChildByID("custom-15-face"_spr)) return;
 
@@ -94,13 +97,11 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
     }
 }
 
-// Keep the red Extreme Demon texture hidden and the glow centered whenever GD updates the sprite
 class $modify(MyGJDifficultySprite, GJDifficultySprite) {
     void updateDifficultyFrame(int difficulty, GJDifficultyName name) {
         GJDifficultySprite::updateDifficultyFrame(difficulty, name);
         if (this->getChildByID("custom-15-face"_spr)) {
             this->setOpacity(0);
-            fixFeatureGlowPosition(this);
         }
     }
 
@@ -108,7 +109,9 @@ class $modify(MyGJDifficultySprite, GJDifficultySprite) {
         GJDifficultySprite::updateFeatureState(state);
         if (this->getChildByID("custom-15-face"_spr)) {
             this->setOpacity(0);
-            fixFeatureGlowPosition(this);
+            if (auto parent = this->getParent()) {
+                alignFeatureGlowToFace(parent, this);
+            }
         }
     }
 };
@@ -120,6 +123,7 @@ class $modify(MyLevelCell, LevelCell) {
             if (auto diffContainer = this->m_mainLayer->getChildByID("difficulty-container")) {
                 if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(diffContainer->getChildByID("difficulty-sprite"))) {
                     applyCustom15StarFace(diffSprite);
+                    alignFeatureGlowToFace(diffContainer, diffSprite);
                 }
             }
         }
@@ -134,6 +138,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
             applyCustom15StarFace(diffSprite);
             applyCustom15StarLabel(this);
             diffSprite->setPositionY(diffSprite->getPositionY() + 6.f);
+            alignFeatureGlowToFace(this, diffSprite);
         }
     }
 
