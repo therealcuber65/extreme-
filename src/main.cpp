@@ -11,6 +11,14 @@ bool isCustom15StarLevel(GJGameLevel* level) {
 void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
     if (!diffSprite) return;
 
+    // Always keep the vanilla face hidden even after feature/epic updates
+    diffSprite->setOpacity(0);
+
+    // Nudge the Feature/Epic/Legendary/Mythic ring/fire down slightly so it centers behind the demon head
+    if (auto featureSprite = diffSprite->getChildByID("feature-coin")) {
+        featureSprite->setPositionY(diffSprite->getContentSize().height / 2.f - 3.5f);
+    }
+
     if (diffSprite->getChildByID("custom-15-face"_spr)) return;
 
     auto imgPath = Mod::get()->getResourcesDir() / "resources" / "list_demon.png";
@@ -20,8 +28,7 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
 
     if (auto customSprite = CCSprite::create(imgPath.string().c_str())) {
         customSprite->setID("custom-15-face"_spr);
-
-        diffSprite->setOpacity(0);
+        customSprite->setZOrder(1); // Keep Feature/Epic/Legendary/Mythic fire behind the face
 
         auto targetSize = diffSprite->getContentSize();
         auto imgSize = customSprite->getContentSize();
@@ -56,17 +63,13 @@ void addShadowedLabel(CCNode* parent, const char* text, const char* id, CCPoint 
 void applyCustom15StarLabel(LevelInfoLayer* layer) {
     if (!layer) return;
 
-    // Hide vanilla demon label if the level also has a demon flag
+    // Always keep the vanilla demon label hidden if the level is marked as a demon
     if (auto demonLabel = layer->getChildByID("demon-label")) {
         demonLabel->setVisible(false);
     }
 
     if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(layer->getChildByID("difficulty-sprite"))) {
-        // Prevent adding duplicate labels on refresh
         if (diffSprite->getChildByID("custom-15-label-top"_spr)) return;
-
-        // Nudge the face up once so there is clean room above 15★
-        diffSprite->setPositionY(diffSprite->getPositionY() + 6.f);
 
         float centerX = diffSprite->getContentSize().width / 2.f;
 
@@ -89,24 +92,16 @@ class $modify(MyLevelCell, LevelCell) {
 };
 
 class $modify(MyLevelInfoLayer, LevelInfoLayer) {
-    bool init(GJGameLevel* level, bool challenge) {
-        if (!LevelInfoLayer::init(level, challenge)) return false;
-        if (isCustom15StarLevel(level)) {
-            if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
-                applyCustom15StarFace(diffSprite);
-            }
-            applyCustom15StarLabel(this);
-        }
-        return true;
-    }
+    void updateLabelValues() {
+        LevelInfoLayer::updateLabelValues();
 
-    void levelDownloadFinished(GJGameLevel* level) {
-        LevelInfoLayer::levelDownloadFinished(level);
-        if (isCustom15StarLevel(level)) {
+        if (isCustom15StarLevel(this->m_level)) {
             if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
                 applyCustom15StarFace(diffSprite);
+                applyCustom15StarLabel(this);
+
+                diffSprite->setPositionY(diffSprite->getPositionY() + 6.f);
             }
-            applyCustom15StarLabel(this);
         }
     }
 };
