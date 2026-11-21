@@ -107,7 +107,7 @@ class $modify(MyLevelCell, LevelCell) {
         if (isCustom15StarLevel(level)) {
             if (auto diffContainer = this->m_mainLayer->getChildByID("difficulty-container")) {
                 if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(diffContainer->getChildByID("difficulty-sprite"))) {
-                    applyCustom15StarFace(diffSprite, 1.02f, 6.4f);
+                    applyCustom15StarFace(diffSprite, 1.02f, 6.8f);
                     applyCustom15StarCellLabel(diffContainer, diffSprite);
                 }
             }
