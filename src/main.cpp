@@ -30,11 +30,10 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
         if (imgSize.width > 0 && imgSize.height > 0) {
             float scaleX = targetSize.width / imgSize.width;
             float scaleY = targetSize.height / imgSize.height;
-            customSprite->setScale(std::min(scaleX, scaleY) * 0.90f);
+            customSprite->setScale(std::min(scaleX, scaleY) * 0.80f);
         }
 
-        // Center the round head squarely inside the Featured ring & Epic/Legendary/Mythic fire
-        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f + 8.5f });
+        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f + 6.5f });
         diffSprite->addChild(customSprite);
     }
 }
