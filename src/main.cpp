@@ -54,10 +54,10 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
         auto label = CCLabelBMFont::create(CUSTOM_DIFFICULTY_NAME, "bigFont.fnt");
         label->setID("custom-15-label"_spr);
         label->setAlignment(kCCTextAlignmentCenter);
-        label->limitLabelWidth(65.f, 0.43f, 0.1f);
+        label->setScale(0.34f);
         label->setPosition({
             diffSprite->getPositionX(),
-            diffSprite->getPositionY() - 28.f
+            diffSprite->getPositionY() - 25.5f
         });
         layer->addChild(label);
     }
