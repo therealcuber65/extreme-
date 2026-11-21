@@ -44,27 +44,28 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
         demonLabel->setVisible(false);
     }
 
-    // Prevent adding duplicate labels on refresh
-    if (layer->getChildByID("custom-15-label-top"_spr)) return;
+    if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(layer->getChildByID("difficulty-sprite"))) {
+        // Prevent adding duplicate labels on refresh
+        if (diffSprite->getChildByID("custom-15-label-top"_spr)) return;
 
-    if (auto diffSprite = layer->getChildByID("difficulty-sprite")) {
-        // Nudge the face up slightly to match vanilla Demon vertical alignment
-        diffSprite->setPositionY(diffSprite->getPositionY() + 4.f);
+        // Nudge the face up once so there is clean room above 15★
+        diffSprite->setPositionY(diffSprite->getPositionY() + 6.f);
 
-        float centerX = diffSprite->getPositionX();
-        float baseY = diffSprite->getPositionY();
+        float centerX = diffSprite->getContentSize().width / 2.f;
 
         auto topLabel = CCLabelBMFont::create("LIST", "bigFont.fnt");
         topLabel->setID("custom-15-label-top"_spr);
         topLabel->setScale(0.28f);
-        topLabel->setPosition({ centerX, baseY - 19.5f });
-        layer->addChild(topLabel);
+        topLabel->setZOrder(10);
+        topLabel->setPosition({ centerX, -3.f });
+        diffSprite->addChild(topLabel);
 
         auto bottomLabel = CCLabelBMFont::create("DEMON", "bigFont.fnt");
         bottomLabel->setID("custom-15-label-bottom"_spr);
         bottomLabel->setScale(0.28f);
-        bottomLabel->setPosition({ centerX, baseY - 27.5f });
-        layer->addChild(bottomLabel);
+        bottomLabel->setZOrder(10);
+        bottomLabel->setPosition({ centerX, -11.5f });
+        diffSprite->addChild(bottomLabel);
     }
 }
 
