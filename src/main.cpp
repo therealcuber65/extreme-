@@ -30,11 +30,11 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
         if (imgSize.width > 0 && imgSize.height > 0) {
             float scaleX = targetSize.width / imgSize.width;
             float scaleY = targetSize.height / imgSize.height;
-            customSprite->setScale(std::min(scaleX, scaleY) * 0.96f);
+            customSprite->setScale(std::min(scaleX, scaleY) * 0.90f);
         }
 
-        // Shift the face up inside diffSprite so the round head centers right inside the Featured/Epic/Legendary/Mythic ring & fire
-        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f + 3.0f });
+        // Center the round head squarely inside the Featured ring & Epic/Legendary/Mythic fire
+        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f + 8.5f });
         diffSprite->addChild(customSprite);
     }
 }
@@ -67,8 +67,8 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
     if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(layer->getChildByID("difficulty-sprite"))) {
         if (!diffSprite->getChildByID("custom-15-label-top"_spr)) {
             float centerX = diffSprite->getContentSize().width / 2.f;
-            addShadowedLabel(diffSprite, "LIST", "custom-15-label-top"_spr, { centerX, 7.0f }, 0.36f);
-            addShadowedLabel(diffSprite, "DEMON", "custom-15-label-bottom"_spr, { centerX, -2.5f }, 0.36f);
+            addShadowedLabel(diffSprite, "LIST", "custom-15-label-top"_spr, { centerX, 9.5f }, 0.36f);
+            addShadowedLabel(diffSprite, "DEMON", "custom-15-label-bottom"_spr, { centerX, 0.0f }, 0.36f);
         }
     }
 }
@@ -109,7 +109,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
             applyCustom15StarFace(diffSprite);
             applyCustom15StarLabel(this);
-            diffSprite->setPositionY(diffSprite->getPositionY() + 6.f);
+            diffSprite->setPositionY(diffSprite->getPositionY() + 3.f);
         }
     }
 
