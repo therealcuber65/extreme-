@@ -56,6 +56,19 @@ void addShadowedLabel(CCNode* parent, const char* text, const char* id, CCPoint 
     parent->addChild(label);
 }
 
+void applyCustom15StarCellLabel(CCNode* diffContainer, GJDifficultySprite* diffSprite) {
+    if (!diffContainer || !diffSprite) return;
+
+    if (auto demonLabel = diffContainer->getChildByID("demon-label")) {
+        demonLabel->setVisible(false);
+    }
+
+    if (!diffSprite->getChildByID("custom-15-cell-label"_spr)) {
+        float centerX = diffSprite->getContentSize().width / 2.f;
+        addShadowedLabel(diffSprite, "DEMON", "custom-15-cell-label"_spr, { centerX, 3.0f }, 0.34f);
+    }
+}
+
 void applyCustom15StarLabel(LevelInfoLayer* layer) {
     if (!layer) return;
 
@@ -95,6 +108,7 @@ class $modify(MyLevelCell, LevelCell) {
             if (auto diffContainer = this->m_mainLayer->getChildByID("difficulty-container")) {
                 if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(diffContainer->getChildByID("difficulty-sprite"))) {
                     applyCustom15StarFace(diffSprite);
+                    applyCustom15StarCellLabel(diffContainer, diffSprite);
                 }
             }
         }
