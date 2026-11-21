@@ -9,7 +9,7 @@ bool isCustom15StarLevel(GJGameLevel* level) {
     return level && level->m_stars == 15 && level->m_levelID != 139;
 }
 
-void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
+void applyCustom15StarFace(GJDifficultySprite* diffSprite, float scaleMult, float yOffset) {
     if (!diffSprite) return;
 
     diffSprite->setOpacity(0);
@@ -30,10 +30,10 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
         if (imgSize.width > 0 && imgSize.height > 0) {
             float scaleX = targetSize.width / imgSize.width;
             float scaleY = targetSize.height / imgSize.height;
-            customSprite->setScale(std::min(scaleX, scaleY) * 0.85f);
+            customSprite->setScale(std::min(scaleX, scaleY) * scaleMult);
         }
 
-        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f + 7.5f });
+        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f + yOffset });
         diffSprite->addChild(customSprite);
     }
 }
@@ -107,7 +107,8 @@ class $modify(MyLevelCell, LevelCell) {
         if (isCustom15StarLevel(level)) {
             if (auto diffContainer = this->m_mainLayer->getChildByID("difficulty-container")) {
                 if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(diffContainer->getChildByID("difficulty-sprite"))) {
-                    applyCustom15StarFace(diffSprite);
+                    // Use 1.0f scale in LevelCell so it fills the Featured ring just like Incandescence
+                    applyCustom15StarFace(diffSprite, 1.0f, 5.5f);
                     applyCustom15StarCellLabel(diffContainer, diffSprite);
                 }
             }
@@ -120,7 +121,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         if (!isCustom15StarLevel(this->m_level)) return;
 
         if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
-            applyCustom15StarFace(diffSprite);
+            // Keep 0.85f scale and +7.5f offset on LevelInfoLayer
+            applyCustom15StarFace(diffSprite, 0.85f, 7.5f);
             applyCustom15StarLabel(this);
             diffSprite->setPositionY(diffSprite->getPositionY() + 3.f);
         }
