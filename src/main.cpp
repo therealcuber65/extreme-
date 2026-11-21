@@ -4,9 +4,6 @@
 
 using namespace geode::prelude;
 
-// Use \n to stack onto two lines just like vanilla "EASY\nDEMON"
-constexpr const char* CUSTOM_DIFFICULTY_NAME = "LIST\nDEMON";
-
 bool isCustom15StarLevel(GJGameLevel* level) {
     return level && level->m_stars == 15 && level->m_levelID != 139;
 }
@@ -48,18 +45,23 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
     }
 
     // Prevent adding duplicate labels on refresh
-    if (layer->getChildByID("custom-15-label"_spr)) return;
+    if (layer->getChildByID("custom-15-label-top"_spr)) return;
 
     if (auto diffSprite = layer->getChildByID("difficulty-sprite")) {
-        auto label = CCLabelBMFont::create(CUSTOM_DIFFICULTY_NAME, "bigFont.fnt");
-        label->setID("custom-15-label"_spr);
-        label->setAlignment(kCCTextAlignmentCenter);
-        label->setScale(0.34f);
-        label->setPosition({
-            diffSprite->getPositionX(),
-            diffSprite->getPositionY() - 25.5f
-        });
-        layer->addChild(label);
+        float centerX = diffSprite->getPositionX();
+        float baseY = diffSprite->getPositionY();
+
+        auto topLabel = CCLabelBMFont::create("LIST", "bigFont.fnt");
+        topLabel->setID("custom-15-label-top"_spr);
+        topLabel->setScale(0.32f);
+        topLabel->setPosition({ centerX, baseY - 21.5f });
+        layer->addChild(topLabel);
+
+        auto bottomLabel = CCLabelBMFont::create("DEMON", "bigFont.fnt");
+        bottomLabel->setID("custom-15-label-bottom"_spr);
+        bottomLabel->setScale(0.32f);
+        bottomLabel->setPosition({ centerX, baseY - 31.0f });
+        layer->addChild(bottomLabel);
     }
 }
 
