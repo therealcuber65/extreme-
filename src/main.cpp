@@ -15,17 +15,15 @@ void fixFeatureGlowPosition(GJDifficultySprite* diffSprite) {
     auto targetSize = diffSprite->getContentSize();
     CCPoint centeredPos = { targetSize.width / 2.f, targetSize.height / 2.f - 4.5f };
 
-    // Move m_featureCoin (Featured / Epic / Legendary / Mythic ring & fire) down to match Extreme Demon centering
-    if (diffSprite->m_featureCoin) {
-        diffSprite->m_featureCoin->setPosition(centeredPos);
-        diffSprite->m_featureCoin->setZOrder(-1);
-    }
-
-    // Also shift any other child sprites (like fire particles) that belong to the feature state
-    for (auto* child : CCArrayExt<CCNode*>(diffSprite->getChildren())) {
+    // Shift every native child sprite (Featured ring, Epic/Legendary/Mythic fire)
+    // down to match Extreme Demon centering
+    for (auto* child : diffSprite->getChildrenExt()) {
         if (!child) continue;
         auto id = child->getID();
-        if (id != "custom-15-face"_spr && id != "custom-15-label-top"_spr && id != "custom-15-label-bottom"_spr && id != "custom-15-shadow"_spr) {
+        if (id != "custom-15-face"_spr &&
+            id != "custom-15-label-top"_spr &&
+            id != "custom-15-label-bottom"_spr &&
+            id != "custom-15-shadow"_spr) {
             child->setPosition(centeredPos);
             child->setZOrder(-1);
         }
