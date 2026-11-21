@@ -9,25 +9,6 @@ bool isCustom15StarLevel(GJGameLevel* level) {
     return level && level->m_stars == 15 && level->m_levelID != 139;
 }
 
-void alignFeatureGlowToFace(CCNode* parent, GJDifficultySprite* diffSprite) {
-    if (!parent || !diffSprite) return;
-
-    CCPoint faceCenter = diffSprite->getPosition();
-
-    // Align the Featured / Epic / Legendary / Mythic ring & fire on the parent layer
-    // to match Extreme Demon centering behind the custom face
-    for (auto* child : parent->getChildrenExt()) {
-        if (!child || child == diffSprite) continue;
-        auto id = child->getID();
-        if (id == "feature-coin" || id == "epic-sprite" ||
-            (std::abs(child->getPositionX() - faceCenter.x) < 1.f &&
-             std::abs(child->getPositionY() - faceCenter.y) < 15.f &&
-             child->getZOrder() < diffSprite->getZOrder())) {
-            child->setPosition({ faceCenter.x, faceCenter.y - 4.5f });
-        }
-    }
-}
-
 void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
     if (!diffSprite) return;
 
@@ -52,7 +33,8 @@ void applyCustom15StarFace(GJDifficultySprite* diffSprite) {
             customSprite->setScale(std::min(scaleX, scaleY) * 0.96f);
         }
 
-        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f - 1.5f });
+        // Center directly inside diffSprite so Featured/Epic/Legendary/Mythic ring & fire align naturally
+        customSprite->setPosition({ targetSize.width / 2.f, targetSize.height / 2.f - 4.5f });
         diffSprite->addChild(customSprite);
     }
 }
@@ -85,8 +67,8 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
     if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(layer->getChildByID("difficulty-sprite"))) {
         if (!diffSprite->getChildByID("custom-15-label-top"_spr)) {
             float centerX = diffSprite->getContentSize().width / 2.f;
-            addShadowedLabel(diffSprite, "LIST", "custom-15-label-top"_spr, { centerX, 7.0f }, 0.36f);
-            addShadowedLabel(diffSprite, "DEMON", "custom-15-label-bottom"_spr, { centerX, -2.5f }, 0.36f);
+            addShadowedLabel(diffSprite, "LIST", "custom-15-label-top"_spr, { centerX, 2.5f }, 0.36f);
+            addShadowedLabel(diffSprite, "DEMON", "custom-15-label-bottom"_spr, { centerX, -7.0f }, 0.36f);
         }
     }
 }
@@ -103,9 +85,6 @@ class $modify(MyGJDifficultySprite, GJDifficultySprite) {
         GJDifficultySprite::updateFeatureState(state);
         if (this->getChildByID("custom-15-face"_spr)) {
             this->setOpacity(0);
-            if (auto parent = this->getParent()) {
-                alignFeatureGlowToFace(parent, this);
-            }
         }
     }
 };
@@ -117,7 +96,6 @@ class $modify(MyLevelCell, LevelCell) {
             if (auto diffContainer = this->m_mainLayer->getChildByID("difficulty-container")) {
                 if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(diffContainer->getChildByID("difficulty-sprite"))) {
                     applyCustom15StarFace(diffSprite);
-                    alignFeatureGlowToFace(diffContainer, diffSprite);
                 }
             }
         }
@@ -131,8 +109,6 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
             applyCustom15StarFace(diffSprite);
             applyCustom15StarLabel(this);
-            diffSprite->setPositionY(diffSprite->getPositionY() + 6.f);
-            alignFeatureGlowToFace(this, diffSprite);
         }
     }
 
