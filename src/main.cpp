@@ -12,19 +12,13 @@ bool isCustom15StarLevel(GJGameLevel* level) {
 void alignFeatureGlowToFace(CCNode* parent, GJDifficultySprite* diffSprite) {
     if (!parent || !diffSprite) return;
 
-    // On LevelInfoLayer / LevelCell, the Feature/Epic/Legendary/Mythic glow is a sibling of difficulty-sprite
-    // (or stored on diffSprite->m_featureCoin). Align any glow node to the face's exact center.
     CCPoint faceCenter = diffSprite->getPosition();
 
-    if (auto coin = diffSprite->m_featureCoin) {
-        coin->setPosition({ diffSprite->getContentSize().width / 2.f, diffSprite->getContentSize().height / 2.f - 4.5f });
-        coin->setZOrder(-1);
-    }
-
+    // Align the Featured / Epic / Legendary / Mythic ring & fire on the parent layer
+    // to match Extreme Demon centering behind the custom face
     for (auto* child : parent->getChildrenExt()) {
         if (!child || child == diffSprite) continue;
         auto id = child->getID();
-        // Geometry Dash's feature glow sprite sits right around difficulty-sprite's X coordinate
         if (id == "feature-coin" || id == "epic-sprite" ||
             (std::abs(child->getPositionX() - faceCenter.x) < 1.f &&
              std::abs(child->getPositionY() - faceCenter.y) < 15.f &&
