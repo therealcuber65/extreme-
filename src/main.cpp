@@ -120,7 +120,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         if (!isCustom15StarLevel(this->m_level)) return;
 
         if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
-            applyCustom15StarFace(diffSprite, 0.85f, 7.5f);
+            applyCustom15StarFace(diffSprite, 0.85f, 7.0f);
             applyCustom15StarLabel(this);
             diffSprite->setPositionY(diffSprite->getPositionY() + 3.f);
         }
