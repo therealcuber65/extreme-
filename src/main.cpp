@@ -55,16 +55,16 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
 
         auto topLabel = CCLabelBMFont::create("LIST", "bigFont.fnt");
         topLabel->setID("custom-15-label-top"_spr);
-        topLabel->setScale(0.28f);
+        topLabel->setScale(0.33f);
         topLabel->setZOrder(10);
         topLabel->setPosition({ centerX, 4.5f });
         diffSprite->addChild(topLabel);
 
         auto bottomLabel = CCLabelBMFont::create("DEMON", "bigFont.fnt");
         bottomLabel->setID("custom-15-label-bottom"_spr);
-        bottomLabel->setScale(0.28f);
+        bottomLabel->setScale(0.33f);
         bottomLabel->setZOrder(10);
-        bottomLabel->setPosition({ centerX, -3.5f });
+        bottomLabel->setPosition({ centerX, -4.0f });
         diffSprite->addChild(bottomLabel);
     }
 }
