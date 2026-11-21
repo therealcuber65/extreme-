@@ -6,7 +6,7 @@
 using namespace geode::prelude;
 
 bool isCustom15StarLevel(GJGameLevel* level) {
-    return level && level->m_stars == 15 && level->m_levelID != 139;
+    return level && level->m_stars == 15 && level->m_levelID != 169;
 }
 
 void applyCustom15StarFace(GJDifficultySprite* diffSprite, float scaleMult, float yOffset) {
