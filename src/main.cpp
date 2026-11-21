@@ -48,19 +48,22 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
     if (layer->getChildByID("custom-15-label-top"_spr)) return;
 
     if (auto diffSprite = layer->getChildByID("difficulty-sprite")) {
+        // Nudge the face up slightly to match vanilla Demon vertical alignment
+        diffSprite->setPositionY(diffSprite->getPositionY() + 4.f);
+
         float centerX = diffSprite->getPositionX();
         float baseY = diffSprite->getPositionY();
 
         auto topLabel = CCLabelBMFont::create("LIST", "bigFont.fnt");
         topLabel->setID("custom-15-label-top"_spr);
-        topLabel->setScale(0.32f);
-        topLabel->setPosition({ centerX, baseY - 21.5f });
+        topLabel->setScale(0.28f);
+        topLabel->setPosition({ centerX, baseY - 19.5f });
         layer->addChild(topLabel);
 
         auto bottomLabel = CCLabelBMFont::create("DEMON", "bigFont.fnt");
         bottomLabel->setID("custom-15-label-bottom"_spr);
-        bottomLabel->setScale(0.32f);
-        bottomLabel->setPosition({ centerX, baseY - 31.0f });
+        bottomLabel->setScale(0.28f);
+        bottomLabel->setPosition({ centerX, baseY - 27.5f });
         layer->addChild(bottomLabel);
     }
 }
