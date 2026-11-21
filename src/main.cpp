@@ -79,8 +79,8 @@ void applyCustom15StarLabel(LevelInfoLayer* layer) {
     if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(layer->getChildByID("difficulty-sprite"))) {
         if (!diffSprite->getChildByID("custom-15-label-top"_spr)) {
             float centerX = diffSprite->getContentSize().width / 2.f;
-            addShadowedLabel(diffSprite, "LIST", "custom-15-label-top"_spr, { centerX, 11.5f }, 0.36f);
-            addShadowedLabel(diffSprite, "DEMON", "custom-15-label-bottom"_spr, { centerX, 2.0f }, 0.36f);
+            addShadowedLabel(diffSprite, "LIST", "custom-15-label-top"_spr, { centerX, 13.0f }, 0.36f);
+            addShadowedLabel(diffSprite, "DEMON", "custom-15-label-bottom"_spr, { centerX, 1.5f }, 0.36f);
         }
     }
 }
@@ -120,7 +120,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         if (!isCustom15StarLevel(this->m_level)) return;
 
         if (auto diffSprite = typeinfo_cast<GJDifficultySprite*>(this->getChildByID("difficulty-sprite"))) {
-            applyCustom15StarFace(diffSprite, 0.85f, 6.5f);
+            applyCustom15StarFace(diffSprite, 0.85f, 7.5f);
             applyCustom15StarLabel(this);
             diffSprite->setPositionY(diffSprite->getPositionY() + 3.f);
         }
